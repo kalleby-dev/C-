@@ -1,0 +1,13 @@
+D:\Kalleby\Documents\GitHub\Personal\C#\MyProjects\FirstProgram\bin\Debug\netcoreapp3.1\FirstProgram.exe
+D:\Kalleby\Documents\GitHub\Personal\C#\MyProjects\FirstProgram\bin\Debug\netcoreapp3.1\FirstProgram.deps.json
+D:\Kalleby\Documents\GitHub\Personal\C#\MyProjects\FirstProgram\bin\Debug\netcoreapp3.1\FirstProgram.runtimeconfig.json
+D:\Kalleby\Documents\GitHub\Personal\C#\MyProjects\FirstProgram\bin\Debug\netcoreapp3.1\FirstProgram.runtimeconfig.dev.json
+D:\Kalleby\Documents\GitHub\Personal\C#\MyProjects\FirstProgram\bin\Debug\netcoreapp3.1\FirstProgram.dll
+D:\Kalleby\Documents\GitHub\Personal\C#\MyProjects\FirstProgram\bin\Debug\netcoreapp3.1\FirstProgram.pdb
+D:\Kalleby\Documents\GitHub\Personal\C#\MyProjects\FirstProgram\obj\Debug\netcoreapp3.1\FirstProgram.csprojAssemblyReference.cache
+D:\Kalleby\Documents\GitHub\Personal\C#\MyProjects\FirstProgram\obj\Debug\netcoreapp3.1\FirstProgram.AssemblyInfoInputs.cache
+D:\Kalleby\Documents\GitHub\Personal\C#\MyProjects\FirstProgram\obj\Debug\netcoreapp3.1\FirstProgram.AssemblyInfo.cs
+D:\Kalleby\Documents\GitHub\Personal\C#\MyProjects\FirstProgram\obj\Debug\netcoreapp3.1\FirstProgram.csproj.CoreCompileInputs.cache
+D:\Kalleby\Documents\GitHub\Personal\C#\MyProjects\FirstProgram\obj\Debug\netcoreapp3.1\FirstProgram.dll
+D:\Kalleby\Documents\GitHub\Personal\C#\MyProjects\FirstProgram\obj\Debug\netcoreapp3.1\FirstProgram.pdb
+D:\Kalleby\Documents\GitHub\Personal\C#\MyProjects\FirstProgram\obj\Debug\netcoreapp3.1\FirstProgram.genruntimeconfig.cache
