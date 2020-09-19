@@ -21,20 +21,35 @@ namespace FirstProgram.Src.View
             // Initialize a subpanel in order to agroup subcomponents
             FlowLayoutPanel flexBox = this.iFlexPanel("userInputBox");
             flexBox.FlowDirection = FlowDirection.TopDown;
-            flexBox.Controls.Add(this.iLabel("lblTitle", "Registrar Livro"));
+            flexBox.Controls.Add( this.iLabel("lblTitle", "Registrar Livro", this.fontTitleStyle) );
 
-            // Username input container
-            FlowLayoutPanel userNameInput = this.iFlexPanel("userNameInput");
-            userNameInput.FlowDirection = FlowDirection.LeftToRight;
-            userNameInput.Controls.Add(this.iLabel("lblName", "Nome:", null, ContentAlignment.BottomRight, false));
-            userNameInput.Controls.Add(this.txtName);
+            FlowLayoutPanel boxInput = this.iFlexPanel("boxInput");
 
-            // Add components into subpanel
+            // Book name input container
+            FlowLayoutPanel boxNameInput = this.iFlexPanel("boxNameInput");
+            boxNameInput.FlowDirection = FlowDirection.TopDown;
+            boxNameInput.Controls.Add(this.iLabel("lblName", "Nome:"));
+            boxNameInput.Controls.Add(this.txtName);
+
+            // Book price input container
+            FlowLayoutPanel boxPriceInput = this.iFlexPanel("boxPriceInput");
+            boxPriceInput.FlowDirection = FlowDirection.TopDown;
+            boxPriceInput.Controls.Add(this.iLabel("lblPrice", "Preço:"));
+            boxPriceInput.Controls.Add(this.txtPrice);
+
+
+            this.btnSend.Anchor = AnchorStyles.Bottom;
             this.btnSend.Click += new EventHandler(onSendClick);
-            flexBox.Controls.Add(userNameInput);
-            flexBox.Controls.Add(this.btnSend);
-
             
+            
+            // Add components into subpanel
+            boxInput.Controls.Add(boxNameInput);
+            boxInput.Controls.Add(boxPriceInput);
+            boxInput.Controls.Add(this.btnSend);
+
+            flexBox.Controls.Add(boxInput);
+            
+
             //Update interface
             flexPanel.Controls.Add(flexBox);
             Console.WriteLine("SETUP_Components - Ready");
@@ -46,12 +61,17 @@ namespace FirstProgram.Src.View
 
 
         private void onSendClick(object sender, EventArgs e){
-            String text = this.txtName.Text;
-            Console.WriteLine($"APP_MSG: {text}");
+            String name = this.txtName.Text;
+            String price = this.txtPrice.Text;
+            Console.WriteLine($"APP_MSG: {name}");
+            Console.WriteLine($"APP_MSG: {price}");
         }
+
+
 
         // Components declaration
         private TextBox txtName = new IForm().iText("txtName");
+        private NumericUpDown txtPrice = new IForm().iNumber("txtPrice", 2);
         private Button btnSend = new IForm().iButton("btnSend", "Enviar"); 
     }
 }

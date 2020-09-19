@@ -28,7 +28,9 @@ namespace FirstProgram.Src.Interfaces
             panel.Name = name;
             panel.TabIndex = 0;
             panel.AutoSize = true;
-            panel.Location = new Point(0,0);
+            panel.Anchor = AnchorStyles.Top;
+            panel.WrapContents = true;
+            panel.Dock = DockStyle.Fill;
 
             return panel;
         }
@@ -43,10 +45,19 @@ namespace FirstProgram.Src.Interfaces
 
         
         ///<summary>Create a basic TextBox</summary>
-        public TextBox iText(String name, Font font = null)
+        public TextBox iText(String name, String text = null, Font font = null)
         {
-            TextBox textBox = (TextBox) this.create(new TextBox(), name, null, font);
+            TextBox textBox = (TextBox) this.create(new TextBox(), name, text, font);
             return textBox;
+        }
+
+
+        ///<summary>Create a basic NumberBox</summary>
+        public NumericUpDown iNumber(String name, int decimalPlates = 0,String text = null, Font font = null)
+        {
+            NumericUpDown numberBox = (NumericUpDown) this.create(new NumericUpDown(), name, text, font);
+            numberBox.DecimalPlaces = decimalPlates;
+            return numberBox;
         }
 
 
