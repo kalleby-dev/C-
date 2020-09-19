@@ -9,6 +9,7 @@ namespace FirstProgram
 
         static void Main()
         {
+            Application.EnableVisualStyles();
             Application.Run(new TelaInicio());
         }
     }
