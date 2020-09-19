@@ -7,7 +7,7 @@ namespace FirstProgram.Src.Interfaces
     public class IForm : Form
     {
         protected Font fontTitleStyle = new Font("Arial", 18, FontStyle.Bold);
-        protected Font fontTextStyle = new Font("Arial", 12, FontStyle.Regular);
+        protected Font fontTextStyle = new Font("Arial", 10, FontStyle.Regular);
         public IForm(){}
         protected IForm(string name, string title, Size size){
             this.Name = name;
@@ -33,65 +33,45 @@ namespace FirstProgram.Src.Interfaces
             return panel;
         }
 
-        ///<summary>
-        /// Create a basic Button
-        ///</summary>
-        public Button iButton(String name, String text, Font font = null){
-            Control c = new Control();
-            
-            Button button = new Button();
-
-            button = (Button)this.c(button, "Clique");
-            c.Name = name;
-            c.Text = text;
-            c.AutoSize = true;
-
-            
-            if(font != null) c.Font = font;
-            else c.Font = this.fontTextStyle;
-
+        
+        ///<summary>Create a basic Button</summary>
+        public Button iButton(String name, String text, Font font = null)
+        {
+            Button button = (Button) this.create(new Button(), name, text, font);
             return button;
         }
 
-        public Control c(Control obj, String text){
-            Control a = obj;
-            a.Text = text;
-            return a;
-        }
-
         
-        ///<summary>
-        /// Create a basic TextBox
-        ///</summary>
-        public TextBox iText(String name, Font font = null){
-            TextBox textBox = new TextBox();
-
-            textBox.Name = name;
-            if(font != null) textBox.Font = font;
-            else textBox.Font = this.fontTextStyle;
-
+        ///<summary>Create a basic TextBox</summary>
+        public TextBox iText(String name, Font font = null)
+        {
+            TextBox textBox = (TextBox) this.create(new TextBox(), name, null, font);
             return textBox;
         }
 
 
-        ///<summary>
-        /// Create a basic TextBox
-        ///</summary>
-        public Label iLabel(String name, String text, Font font = null, ContentAlignment align = 0, bool autoSize = true){
-            Label label = new Label();
-
-            label.Name = name;
-            label.Text = text;
-
-            if(font != null) label.Font = font;
-            else label.Font = this.fontTextStyle;
-
+        ///<summary>Create a basic Label</summary>
+        public Label iLabel(String name, String text, Font font = null, ContentAlignment align = 0, bool autoSize = true)
+        {
+            Label label = (Label) this.create( new Label(), name, text, font, autoSize);
             if(align != 0) label.TextAlign = align;
-                
-            label.AutoSize = autoSize;
 
             return label;
         }
+
+
+        ///<summary>Create a basic Component</summary>
+        public Control create(Control obj, String name, String text = null, Font font = null, bool autoSize = true)
+        {
+            obj.Name = name;
+            obj.AutoSize = autoSize;
+            if(text != null) obj.Text = text;
+            if(font != null) obj.Font = font;
+            else obj.Font = this.fontTextStyle;
+
+            return obj;
+        }
+
 
         ///<summary>
         /// Search for a component into component list
