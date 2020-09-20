@@ -17,9 +17,9 @@ namespace FirstProgram.Src.Lib.MySql
 
         public DataLayer(String table, Array required = null, String primary = "id", bool timestamps = true){
             Console.WriteLine(this.Connection.State);
-            data.Add("name", "Cronicas de narnia");
-            data.Add("price", "13.5");
-            this.create(table, this.data, false);
+            data.Add("name", "Livro Legal");
+            data.Add("price", "10.50");
+            this.create(table, this.data);
         }
 
         public DataLayer find(){

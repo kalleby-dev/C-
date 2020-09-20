@@ -9,7 +9,7 @@ namespace FirstProgram.Src.Lib.MySql
         
         protected Dictionary <String, String> data = new Dictionary <string, string> ();
 
-        protected void create(String table, Dictionary <String, String> data, bool timestamp){
+        protected void create(String table, Dictionary <String, String> data, bool timestamp = false){
             var sqlColumns = "";
             var sqlValues = "";
 
@@ -22,7 +22,15 @@ namespace FirstProgram.Src.Lib.MySql
 
             var stmt = this.Connection.CreateCommand();
             stmt.CommandText = $"INSERT INTO {table}({sqlColumns}) VALUES ({sqlValues})";
-            Console.WriteLine(stmt.CommandText);
+
+            foreach (var item in data)
+            {
+                stmt.Parameters.AddWithValue($"?{item.Key}", $"{item.Value}");
+            }
+
+            stmt.ExecuteNonQuery();
+
+            Console.WriteLine("Ok");
 
             
         }
