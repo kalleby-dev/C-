@@ -72,6 +72,6 @@ namespace FirstProgram.Src.View
         // Components declaration
         private TextBox txtName = new IForm().iText("txtName");
         private NumericUpDown txtPrice = new IForm().iNumber("txtPrice", 2);
-        private Button btnSend = new IForm().iButton("btnSend", "Enviar"); 
+        private Button btnSend = new IForm().iButton("btnSend", "Cadastrar"); 
     }
 }
