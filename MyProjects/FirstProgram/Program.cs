@@ -2,6 +2,7 @@ using System;
 using System.Windows.Forms;
 using FirstProgram.Src.View;
 using FirstProgram.Src.Interfaces;
+using FirstProgram.Src.Lib.MySql;
 
 namespace FirstProgram
 {
@@ -10,7 +11,7 @@ namespace FirstProgram
 
         static void Main()
         {
-            IDatabase database = new IDatabase();
+            DataLayer database = new DataLayer("book");
             Application.EnableVisualStyles();
             Application.Run(new TelaInicio());
         }

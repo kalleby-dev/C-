@@ -15,6 +15,7 @@ namespace FirstProgram.Src.Interfaces
             this.Size = size;
             this.StartPosition = FormStartPosition.CenterScreen;
 
+            
             Console.WriteLine($"Window: {name} - Ready");
         }
 
@@ -23,7 +24,7 @@ namespace FirstProgram.Src.Interfaces
         /// Create a basic FlowPanel
         ///</summary>
         protected FlowLayoutPanel iFlexPanel(string name){
-            FlowLayoutPanel panel = new FlowLayoutPanel();
+            var panel = new FlowLayoutPanel();
 
             panel.Name = name;
             panel.TabIndex = 0;
@@ -39,7 +40,7 @@ namespace FirstProgram.Src.Interfaces
         ///<summary>Create a basic Button</summary>
         public Button iButton(String name, String text, Font font = null)
         {
-            Button button = (Button) this.create(new Button(), name, text, font);
+            var button = (Button) this.create(new Button(), name, text, font);
             return button;
         }
 
@@ -47,7 +48,7 @@ namespace FirstProgram.Src.Interfaces
         ///<summary>Create a basic TextBox</summary>
         public TextBox iText(String name, String text = null, Font font = null)
         {
-            TextBox textBox = (TextBox) this.create(new TextBox(), name, text, font);
+            var textBox = (TextBox) this.create(new TextBox(), name, text, font);
             return textBox;
         }
 
@@ -55,7 +56,7 @@ namespace FirstProgram.Src.Interfaces
         ///<summary>Create a basic NumberBox</summary>
         public NumericUpDown iNumber(String name, int decimalPlates = 0,String text = null, Font font = null)
         {
-            NumericUpDown numberBox = (NumericUpDown) this.create(new NumericUpDown(), name, text, font);
+            var numberBox = (NumericUpDown) this.create(new NumericUpDown(), name, text, font);
             numberBox.DecimalPlaces = decimalPlates;
             return numberBox;
         }
@@ -64,7 +65,7 @@ namespace FirstProgram.Src.Interfaces
         ///<summary>Create a basic Label</summary>
         public Label iLabel(String name, String text, Font font = null, ContentAlignment align = 0, bool autoSize = true)
         {
-            Label label = (Label) this.create( new Label(), name, text, font, autoSize);
+            var label = (Label) this.create( new Label(), name, text, font, autoSize);
             if(align != 0) label.TextAlign = align;
 
             return label;
@@ -89,7 +90,7 @@ namespace FirstProgram.Src.Interfaces
         ///</summary>
        #nullable enable
         protected Control? getComponent(String keyname, Control.ControlCollection control){
-            Control[] result = control.Find(keyname, false);
+            var result = control.Find(keyname, false);
  
             foreach (Control item in result){
                 if(item != null) return item;

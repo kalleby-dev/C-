@@ -17,11 +17,18 @@ namespace FirstProgram.Src.View
 
         protected void initializeInterface(){
             FlowLayoutPanel flexPanel = this.iFlexPanel("flexPanel");
-                
+            flexPanel.FlowDirection = FlowDirection.TopDown;
+            flexPanel.BackColor = Color.White;
+            flexPanel.ForeColor = Color.OrangeRed;
+
+            
             // Initialize a subpanel in order to agroup subcomponents
-            FlowLayoutPanel flexBox = this.iFlexPanel("userInputBox");
+            FlowLayoutPanel flexBox = this.iFlexPanel("menuPanel");
             flexBox.FlowDirection = FlowDirection.TopDown;
             flexBox.Controls.Add( this.iLabel("lblTitle", "Registrar Livro", this.fontTitleStyle) );
+            flexBox.BackColor = Color.OrangeRed;
+            flexBox.ForeColor = Color.White;
+
 
             FlowLayoutPanel boxInput = this.iFlexPanel("boxInput");
 
@@ -36,7 +43,13 @@ namespace FirstProgram.Src.View
             boxPriceInput.FlowDirection = FlowDirection.TopDown;
             boxPriceInput.Controls.Add(this.iLabel("lblPrice", "Preço:"));
             boxPriceInput.Controls.Add(this.txtPrice);
+    
 
+            //Style
+            this.btnSend.FlatStyle = FlatStyle.Flat;
+            this.btnSend.FlatAppearance.BorderSize = 0;
+            this.btnSend.BackColor = Color.OrangeRed;
+            this.btnSend.ForeColor = Color.White;
 
             this.btnSend.Anchor = AnchorStyles.Bottom;
             this.btnSend.Click += new EventHandler(onSendClick);
@@ -47,14 +60,15 @@ namespace FirstProgram.Src.View
             boxInput.Controls.Add(boxPriceInput);
             boxInput.Controls.Add(this.btnSend);
 
-            flexBox.Controls.Add(boxInput);
+            
             
 
             //Update interface
             flexPanel.Controls.Add(flexBox);
+            flexPanel.Controls.Add(boxInput);
             Console.WriteLine("SETUP_Components - Ready");
 
-
+            
             this.Controls.Add(flexPanel);
             Console.WriteLine("SETUP_Interface - Ready");
         }
