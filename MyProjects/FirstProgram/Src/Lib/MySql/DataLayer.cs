@@ -9,23 +9,50 @@ namespace FirstProgram.Src.Lib.MySql
         
 
         protected String table;
-        protected String primary;
+        protected String primary = null;
 
         protected bool timestamps;
         protected Array required;
         
 
-        public DataLayer(String table, Array required = null, String primary = "id", bool timestamps = true){
+        public DataLayer(String table, Array required = null, String primary = "id", bool timestamps = true)
+        {
             Console.WriteLine(this.Connection.State);
-            data.Add("name", "Livro Legal");
-            data.Add("price", "10.50");
-            this.create(table, this.data);
+            this.table = table;
+            this.data.Add("name", "Tiago Pinto");
+            this.data.Add("price", "13.2");
+            Console.WriteLine(this.save());
+            this.read(this.table);
+
         }
 
         public DataLayer find(){
             return this;
         }
 
+        public bool save()
+        {
+            var primary = this.primary;
+            string id = null;
+
+            // Criar um novo
+            if(this.data.ContainsKey("primary")){
+                //Update here
+            }
+
+            if(!this.data.ContainsKey("primary")){
+                id = this.create(this.table, this.data).ToString();
+            }
+            
+            if(id == null) return false;
+
+            return true;
+        }
+
+        public DataLayer? findById(long id){
+
+            return this;
+        }
 
     }
 }

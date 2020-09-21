@@ -9,7 +9,7 @@ namespace FirstProgram.Src.Lib.MySql
         
         protected Dictionary <String, String> data = new Dictionary <string, string> ();
 
-        protected void create(String table, Dictionary <String, String> data, bool timestamp = false){
+        protected long? create(String table, Dictionary <String, String> data, bool timestamp = false){
             var sqlColumns = "";
             var sqlValues = "";
 
@@ -28,15 +28,32 @@ namespace FirstProgram.Src.Lib.MySql
                 stmt.Parameters.AddWithValue($"?{item.Key}", $"{item.Value}");
             }
 
-            stmt.ExecuteNonQuery();
-
-            Console.WriteLine("Ok");
-
-            
+            try
+            {
+                stmt.ExecuteNonQuery();
+                return stmt.LastInsertedId;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return null;
+                
+            }
         }
 
-        protected void read( Array data){
+        protected DataLayer? read(String table, String terms = null, String param = null, String columns = "*"){
+            var stmt = this.Connection.CreateCommand();
+            
+            stmt.CommandText = $"SELECT {columns} FROM {table}";
+            stmt.Prepare();
+            var result = stmt.ExecuteReader();
 
+            while (result.Read())
+            {
+                Console.WriteLine($"Result: id: {result.GetString("id")} name: {result.GetString("name")} price: {result.GetString("price")}");
+            }
+
+            return null;
         }
         protected void update( Array data){
 
