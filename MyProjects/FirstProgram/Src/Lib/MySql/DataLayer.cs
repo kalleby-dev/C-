@@ -15,17 +15,25 @@ namespace FirstProgram.Src.Lib.MySql
         protected Array required;
         
 
-        public DataLayer(String table, Array? req = null, String primary = "id", bool timestamps = true)
+        public DataLayer(String tabela, Array? req = null, String primary = "id", bool timestamps = true)
         {
-            Console.WriteLine(this.Connection.State);
-            this.table = table;
+            /* Console.WriteLine(this.Connection.State); */
+            this.table = tabela;
             this.primary = primary;
-            this.data.Add("name", "Veronica");
-            this.data.Add("price", "60");
+            this.data.Add("name", "GEORGE");
+            this.data.Add("price", "111");
 
-            //Console.WriteLine(this.save());
-            this.findById(1);
+            Console.WriteLine(this.save());
+            Console.WriteLine("\n-----\n");
+            foreach (var item in data){
+                Console.WriteLine(item.Key +" - "+ item.Value);
+            }
+            this.findById("1");
 
+            Console.WriteLine("\n-----\n");
+            foreach (var item in data){
+                Console.WriteLine(item.Key +" - "+ item.Value);
+            }
         }
 
         public DataLayer find(String? terms = null, String? param = null, String columns = "*"){
@@ -39,11 +47,42 @@ namespace FirstProgram.Src.Lib.MySql
             return this;
         }
 
-        public DataLayer? findById(int id, string columns = "*"){
-            
-
-            return this.find($"{this.primary} = ?id", $"?id = {id}", columns).fetch();
+        public DataLayer? findById(string id, string columns = "*"){
+            return this.find($"{this.primary} = ?id", id, columns).fetch();
         }
+
+        protected  DataLayer? fetch(bool all = false){
+            this.open();
+            var stmt = this.Connection.CreateCommand();
+        
+            stmt.CommandText = $"{this.statement}";
+            stmt.Parameters.AddWithValue("@id", param);
+
+            // Executa o cmd SQL e captura os possiveis erros
+            try{
+                var rows = stmt.ExecuteReader();
+                var tempData = new Dictionary <String, Object>();
+
+                while (rows.Read()){
+                    for (int i = 0; i < rows.FieldCount; i++){
+                        tempData[ rows.GetName(i) ] = rows.GetValue(i);
+                    }
+                }
+
+                if(tempData.Count == 0) return null;
+                
+                this.data = tempData;
+                return this;
+            }
+            catch (Exception ex){
+                Console.WriteLine(ex);
+                return null;
+            }
+            finally{
+                this.close();
+            }  
+        }
+
 
         public bool save()
         {
@@ -61,14 +100,22 @@ namespace FirstProgram.Src.Lib.MySql
             
             if(id == null) return false;
 
-            return true;
+            try{
+                this.data = this.findById(id).Data;
+                return true;
+            }
+            catch (Exception ex){
+                Console.WriteLine(ex);
+                return false;
+            }
+
         }
 
         
-        public DataLayer? findById(long id){
+/*         public DataLayer? findById(long id){
 
             return this;
-        }
+        } */
         
 
     }

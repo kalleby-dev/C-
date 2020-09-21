@@ -9,9 +9,9 @@ namespace FirstProgram.Src.Lib.MySql
         protected MySqlException error = null;
         protected MySqlConnection Connection {get {return conn;} }
 
-        public SQLConnector(String host = "localhost", String database = "teste", String user = "root", String pass = null)
+        public SQLConnector()
         {
-            this.open(host, database, user, pass);
+        
         }
 
 
@@ -19,6 +19,8 @@ namespace FirstProgram.Src.Lib.MySql
     ///<summary>Abre uma conexão com o banco de dados</summary>
         public void open(String host = null, String database = null, String user = null, String pass = null)
         {
+
+            database = (database != null)? database : "teste";
             host = (host != null)? host : "localhost";
             user = (user != null)? user : "root";
             pass = (pass != null)? pass : "";

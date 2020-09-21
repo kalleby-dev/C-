@@ -2,21 +2,23 @@ using System.Linq;
 using System;
 using System.Collections.Generic;
 
-#nullable enable
+
 namespace FirstProgram.Src.Lib.MySql
 {
-    
+    #nullable enable
     public abstract class SQLCrud : SQLConnector
     {
         
-        protected String? table = null;
+        protected String table = "";
         protected String? statement = null;
         protected String? param = null;
-        protected Dictionary <String, String> data = new Dictionary <string, string> ();
+        protected Dictionary <String, Object> data = new Dictionary <string, Object> ();
 
-        
+        public Dictionary <String, Object> Data { get{return this.data;} }
+
         // Insere um novo registro no banco de dados
-        protected long? insert(Dictionary <String, String> data, bool timestamp = false){
+        protected long? insert(Dictionary <String, Object> data, bool timestamp = false){
+            this.open();
             var stmt = this.Connection.CreateCommand();
 
             // Cria o cmd SQL dinamicamente
@@ -37,42 +39,14 @@ namespace FirstProgram.Src.Lib.MySql
                 Console.WriteLine(ex);
                 return null;
             }
+            finally{
+                this.close();
+            }
         }
         
 
         //
-        protected DataLayer? fetch(bool all = false){
-            var stmt = this.Connection.CreateCommand();
-            
-            Console.WriteLine(this.statement);
-            //Console.WriteLine(this.param);
 
-/*             stmt.CommandText = $"{this.statement} {this.param}";
-            stmt.Parameters.AddWithValue("@id", '1');
-            // Executa o cmd SQL e captura os possiveis erros
-            try{
-                var result = stmt.ExecuteReader();
-                while (result.Read())
-                    Console.WriteLine($"id: {result.GetString("id")}\n name: {result.GetString("name")}\n price: {result.GetString("price")}");
-            }
-            catch (Exception ex){
-                Console.WriteLine(ex);
-            }
-            Console.WriteLine("finish"); */
-            stmt.CommandText = $"{this.statement}";
-            //stmt.CommandText = $"SELECT * FROM {table} WHERE id = ?id";
-            
-            stmt.Parameters.AddWithValue("?id", "1");
-            
-            var result = stmt.ExecuteReader();
-            Console.WriteLine(stmt.CommandText);
-            while (result.Read())
-            {
-                Console.WriteLine($"Result: id: {result.GetString("id")} name: {result.GetString("name")} price: {result.GetString("price")}");
-            }
-
-            return null;
-        }
         
 
         protected void update( Array data){
@@ -85,5 +59,5 @@ namespace FirstProgram.Src.Lib.MySql
 
         
     }
+    #nullable disable
 }
-#nullable disable
