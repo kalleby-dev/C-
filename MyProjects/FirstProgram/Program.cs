@@ -12,8 +12,9 @@ namespace FirstProgram
         static void Main()
         {
             DataLayer database = new DataLayer("book");
-            Application.EnableVisualStyles();
-            Application.Run(new TelaInicio());
+            /* Application.EnableVisualStyles();
+            Application.Run(new TelaInicio()); */
+            Console.ReadKey();
         }
     }
 }
