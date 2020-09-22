@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Linq;
 using System;
 using System.Collections.Generic;
@@ -20,23 +21,23 @@ namespace FirstProgram.Src.Lib.MySql
             /* Console.WriteLine(this.Connection.State); */
             this.table = tabela;
             this.primary = primary;
-            this.data.Add("name", "GEORGE");
-            this.data.Add("price", "111");
 
-            Console.WriteLine(this.save());
+/*             Console.WriteLine(this.save());
             Console.WriteLine("\n-----\n");
             foreach (var item in data){
                 Console.WriteLine(item.Key +" - "+ item.Value);
-            }
-            this.findById("1");
+            } */
+/*             var p = new Dictionary <string, Object>();
+            p["?name"] = "GEORGE";
+            this.find("name = ?name", p).fetch();
 
             Console.WriteLine("\n-----\n");
             foreach (var item in data){
                 Console.WriteLine(item.Key +" - "+ item.Value);
-            }
+            } */
         }
 
-        public DataLayer find(String? terms = null, String? param = null, String columns = "*"){
+        public DataLayer find(String? terms = null, Dictionary <string, Object>? param = null, String columns = "*"){
             if(terms != null){
                 this.statement = $"SELECT {columns} FROM {this.table} WHERE {terms}";
                 this.param = param;
@@ -48,39 +49,29 @@ namespace FirstProgram.Src.Lib.MySql
         }
 
         public DataLayer? findById(string id, string columns = "*"){
-            return this.find($"{this.primary} = ?id", id, columns).fetch();
+            var param = new Dictionary <string, Object>();
+            param["?id"] = id;
+
+            return this.find($"{this.primary} = ?id", param, columns).fetch();
         }
 
+
+
         protected  DataLayer? fetch(bool all = false){
-            this.open();
-            var stmt = this.Connection.CreateCommand();
-        
-            stmt.CommandText = $"{this.statement}";
-            stmt.Parameters.AddWithValue("@id", param);
 
-            // Executa o cmd SQL e captura os possiveis erros
-            try{
-                var rows = stmt.ExecuteReader();
-                var tempData = new Dictionary <String, Object>();
+            var rows = this.read();
+            if(rows.Count == 0) return null;  
 
-                while (rows.Read()){
-                    for (int i = 0; i < rows.FieldCount; i++){
-                        tempData[ rows.GetName(i) ] = rows.GetValue(i);
-                    }
-                }
-
-                if(tempData.Count == 0) return null;
-                
-                this.data = tempData;
-                return this;
+            if(!all){
+                this.data = rows.First();
             }
-            catch (Exception ex){
-                Console.WriteLine(ex);
-                return null;
+            
+            foreach (var item in rows)
+            {
+               
             }
-            finally{
-                this.close();
-            }  
+            
+            return this;
         }
 
 

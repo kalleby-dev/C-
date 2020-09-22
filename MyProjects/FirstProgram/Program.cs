@@ -12,6 +12,8 @@ namespace FirstProgram
         static void Main()
         {
             DataLayer database = new DataLayer("book");
+            var user = database.findById("1");
+            Console.WriteLine(user.Data["name"]);
             /* Application.EnableVisualStyles();
             Application.Run(new TelaInicio()); */
             Console.ReadKey();
