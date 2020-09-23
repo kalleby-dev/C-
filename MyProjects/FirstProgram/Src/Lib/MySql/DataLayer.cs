@@ -39,6 +39,7 @@ namespace FirstProgram.Src.Lib.MySql
             } */
         }
 
+        // Cria uma string de consulta com base nos parametros informados
         public DataLayer find(String? terms = null, Dictionary <string, Object>? param = null, String columns = "*"){
             if(terms != null){
                 this.statement = $"SELECT {columns} FROM {this.table} WHERE {terms}";
@@ -80,11 +81,11 @@ namespace FirstProgram.Src.Lib.MySql
             string? id = null;
 
             // Criar um novo
-            if(this.data.ContainsKey("primary")){
-                //Update here
+            if(this.data.ContainsKey(primary)){
+                //this.update();
             }
 
-            if(!this.data.ContainsKey("primary")){
+            if(!this.data.ContainsKey(primary)){
                 id = this.insert(this.data).ToString();
             }
             
@@ -101,6 +102,10 @@ namespace FirstProgram.Src.Lib.MySql
 
         }
 
+
+        public void set(String column, Object value){
+            this.data[column] = value;
+        }
         
 /*         public DataLayer? findById(long id){
 

@@ -12,8 +12,11 @@ namespace FirstProgram
         static void Main()
         {
             DataLayer database = new DataLayer("book");
-            var user = database.findById("1");
-            Console.WriteLine($"id:{user.Data["id"]} - name:{user.Data["name"]}");
+            var user = database;
+            user.set("name", "Daniel");
+            user.set("price", "15.5");
+            user.save();
+            Console.WriteLine($"id:{user.Data["id"]} - name:{user.Data["name"]} - price:{user.Data["price"]}");
 
             Console.WriteLine("-----------");
 
