@@ -15,8 +15,8 @@ namespace FirstProgram
             var user = database;
             user.set("name", "Daniel");
             user.set("price", "15.5");
-            user.save();
-            Console.WriteLine($"id:{user.Data["id"]} - name:{user.Data["name"]} - price:{user.Data["price"]}");
+            Console.WriteLine(user.save());
+            //Console.WriteLine($"id:{user.Data["id"]} - name:{user.Data["name"]} - price:{user.Data["price"]}");
 
             Console.WriteLine("-----------");
 

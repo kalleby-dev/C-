@@ -10,19 +10,20 @@ namespace FirstProgram.Src.Lib.MySql
     {
         
         
-        protected String? primary = null;
+        protected String primary;
         protected bool timestamps;
-        protected Array required;
+        protected String?[] required {get; set;} = null!;
 
-        protected List<Dictionary<String, Object>> list;
+        protected List<Dictionary<String, Object>> list = new List<Dictionary<string, object>> ();
         public List<Dictionary<String, Object>> GetFetch {get{return this.list;}}
         
 
-        public DataLayer(String tabela, Array? req = null, String primary = "id", bool timestamps = true)
+        public DataLayer(String table, String?[] req = null!, String primary = "id", bool timestamps = true)
         {
             /* Console.WriteLine(this.Connection.State); */
-            this.table = tabela;
+            this.table = table;
             this.primary = primary;
+            this.required = req ?? new string[0];
 
 /*             Console.WriteLine(this.save());
             Console.WriteLine("\n-----\n");
@@ -77,26 +78,26 @@ namespace FirstProgram.Src.Lib.MySql
 
         public bool save()
         {
-            var primary = this.primary;
+
             string? id = null;
-
-            // Criar um novo
-            if(this.data.ContainsKey(primary)){
-                //this.update();
-            }
-
-            if(!this.data.ContainsKey(primary)){
-                id = this.insert(this.data).ToString();
-            }
-            
-            if(id == null) return false;
-
             try{
+                // Criar um novo
+                if(this.data.ContainsKey(this.primary)){
+                    //this.update();
+                }
+
+                if(!this.data.ContainsKey(this.primary)){
+                    id = this.insert(this.data).ToString();
+                }
+                
+                if(id == null) return false;
+
+                
                 this.data = this.findById(id).Data;
                 return true;
             }
             catch (Exception ex){
-                Console.WriteLine(ex);
+                Console.WriteLine($"ERROR: {ex.Message}");
                 return false;
             }
 

@@ -21,7 +21,7 @@ namespace FirstProgram.Src.Lib.MySql
 
         
         ///<summary>Insere um novo registro no banco de dados retorna o ID do registro</summary>
-        protected long? insert(Dictionary <String, Object> data, bool timestamp = false){
+        protected long insert(Dictionary <String, Object> data, bool timestamp = false){
             this.open();
             var stmt = this.Connection.CreateCommand();
 
@@ -41,8 +41,8 @@ namespace FirstProgram.Src.Lib.MySql
                 return stmt.LastInsertedId;
             }
             catch (Exception ex){
-                Console.WriteLine(ex);
-                return null;
+                Console.WriteLine($"ERROR: {ex.Message}");
+                throw new NullReferenceException("Não foi possivel efetuar o registro");
             }
             finally{
                 this.close();
