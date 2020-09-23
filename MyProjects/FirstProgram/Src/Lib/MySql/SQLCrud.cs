@@ -51,7 +51,7 @@ namespace FirstProgram.Src.Lib.MySql
         
 
         // Realiza uma busca no banco de dados
-        protected List<Dictionary<String, Object>> ? read(){
+        protected List<Dictionary<String, Object>> read(){
             this.open();
             var stmt = this.Connection.CreateCommand();
 
@@ -68,7 +68,7 @@ namespace FirstProgram.Src.Lib.MySql
             try{
                 // Realiza a busca e retorna os resultados
                 var rows = stmt.ExecuteReader(); 
-                if(!rows.HasRows) return null;
+                // if(!rows.HasRows) return null;
             
                 var list = new List<Dictionary <String, Object>> ();
                 
@@ -79,16 +79,13 @@ namespace FirstProgram.Src.Lib.MySql
                         tempData[ rows.GetName(i) ] = rows.GetValue(i);
                     }
 
-                    //Console.WriteLine(tempData["name"]);
-                    list.Add(tempData);
-                    //Console.WriteLine(list.First()["name"]);
+                    list.Add(tempData); 
                 }
-
                 return list;
             }
             catch (Exception ex){
-                Console.WriteLine(ex);
-                return null;
+                Console.WriteLine($"ERROR: {ex.Message}");
+                throw new NullReferenceException("Não foi possivel efetuar a busca");
             }
             finally{
                 this.close();

@@ -52,27 +52,32 @@ namespace FirstProgram.Src.Lib.MySql
             return this;
         }
 
-        public DataLayer? findById(string id, string columns = "*"){
+        public DataLayer findById(string id, string columns = "*"){
             var param = new Dictionary <string, Object>();
             param["?id"] = id;
 
             return this.find($"{this.primary} = ?id", param, columns).fetch();
         }
 
+        //USER: aluno
+        //PASS: aluno@escola
 
+        public DataLayer fetch(bool all = false){
 
-        public DataLayer? fetch(bool all = false){
-
-            var rows = this.read();
-            if(rows == null || rows.Count == 0) return null;  
-
-            if(!all){
-                this.data = rows.First();
+            try
+            {
+                var rows = this.read();
+                if(!all){
+                    this.data = rows.First();
+                    this.list = rows;
+                }
             }
-            
-            //foreach (var item in rows){}
-            this.list = rows;
+            catch (Exception ex){
+                Console.WriteLine($"ERROR: {ex.Message}");
+            }
             return this;
+           /*  if(rows == null || rows.Count == 0) return null;   */
+            //foreach (var item in rows){}
         }
 
 
