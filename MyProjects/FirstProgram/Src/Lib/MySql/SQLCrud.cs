@@ -15,7 +15,9 @@ namespace FirstProgram.Src.Lib.MySql
         protected Dictionary <string, Object>? param = null;
         protected Dictionary <String, Object> data = new Dictionary <string, Object> ();
 
-        public Dictionary <String, Object> Data { get{return this.data;} }
+        public Dictionary <String, Object> Data { 
+            get{return this.data;}
+        }
 
         
         ///<summary>Insere um novo registro no banco de dados retorna o ID do registro</summary>

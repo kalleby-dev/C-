@@ -11,9 +11,11 @@ namespace FirstProgram.Src.Lib.MySql
         
         
         protected String? primary = null;
-
         protected bool timestamps;
         protected Array required;
+
+        protected List<Dictionary<String, Object>> list;
+        public List<Dictionary<String, Object>> GetFetch {get{return this.list;}}
         
 
         public DataLayer(String tabela, Array? req = null, String primary = "id", bool timestamps = true)
@@ -57,20 +59,17 @@ namespace FirstProgram.Src.Lib.MySql
 
 
 
-        protected  DataLayer? fetch(bool all = false){
+        public DataLayer? fetch(bool all = false){
 
             var rows = this.read();
-            if(rows.Count == 0) return null;  
+            if(rows == null || rows.Count == 0) return null;  
 
             if(!all){
                 this.data = rows.First();
             }
             
-            foreach (var item in rows)
-            {
-               
-            }
-            
+            //foreach (var item in rows){}
+            this.list = rows;
             return this;
         }
 
