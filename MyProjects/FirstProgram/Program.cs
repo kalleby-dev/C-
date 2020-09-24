@@ -13,14 +13,14 @@ namespace FirstProgram
         {
             DataLayer database = new DataLayer("book");
             var user = database;
-            user.set("name", "Daniel");
-            user.set("price", "15.5");
+            user.set("name", "DOuglass");
+            user.set("price", "100.99");
             //Console.WriteLine(user.save());
             //Console.WriteLine($"id:{user.Data["id"]} - name:{user.Data["name"]} - price:{user.Data["price"]}");
 
             Console.WriteLine("-----------");
 
-            var users = database.find().fetch(true).GetFetch;
+            var users = database.find("name ").fetch(true).GetFetch;
             
             foreach (var item in users){
                 Console.WriteLine($"id:{item["id"]} - name: {item["name"]}");

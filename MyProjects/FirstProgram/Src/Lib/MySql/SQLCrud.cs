@@ -10,7 +10,7 @@ namespace FirstProgram.Src.Lib.MySql
     public abstract class SQLCrud : SQLConnector
     {
         
-        protected String table = "";
+        
         protected String? statement = null;
         protected Dictionary <string, Object>? param = null;
         protected Dictionary <String, Object> data = new Dictionary <string, Object> ();
@@ -21,7 +21,7 @@ namespace FirstProgram.Src.Lib.MySql
 
         
         ///<summary>Insere um novo registro no banco de dados retorna o ID do registro</summary>
-        protected long insert(Dictionary <String, Object> data, bool timestamp = false){
+        protected long insert(String table, Dictionary <String, Object> data, bool timestamp = false){
             this.open();
             var stmt = this.Connection.CreateCommand();
 
@@ -68,7 +68,6 @@ namespace FirstProgram.Src.Lib.MySql
             try{
                 // Realiza a busca e retorna os resultados
                 var rows = stmt.ExecuteReader(); 
-                // if(!rows.HasRows) return null;
             
                 var list = new List<Dictionary <String, Object>> ();
                 

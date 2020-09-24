@@ -9,8 +9,8 @@ namespace FirstProgram.Src.Lib.MySql
     public class DataLayer : SQLCrud
     {
         
-        
         protected String primary;
+        protected String table = "";
         protected bool timestamps;
         protected String?[] required {get; set;} = null!;
 
@@ -20,27 +20,15 @@ namespace FirstProgram.Src.Lib.MySql
 
         public DataLayer(String table, String?[] req = null!, String primary = "id", bool timestamps = true)
         {
-            /* Console.WriteLine(this.Connection.State); */
             this.table = table;
             this.primary = primary;
             this.required = req ?? new string[0];
-
-/*             Console.WriteLine(this.save());
-            Console.WriteLine("\n-----\n");
-            foreach (var item in data){
-                Console.WriteLine(item.Key +" - "+ item.Value);
-            } */
-/*             var p = new Dictionary <string, Object>();
-            p["?name"] = "GEORGE";
-            this.find("name = ?name", p).fetch();
-
-            Console.WriteLine("\n-----\n");
-            foreach (var item in data){
-                Console.WriteLine(item.Key +" - "+ item.Value);
-            } */
         }
 
-        // Cria uma string de consulta com base nos parametros informados
+        ///<summary>Generate a SQL command string with all terms and parameters</summary>
+        ///<param name="terms" type="string">Clauses for SQL command</param>
+        ///<param name="param" type="string">Parameters for SQL clauses</param>
+        ///<param name="columns" type="string">Columns that will be returned on SQL search</param>
         public DataLayer find(String? terms = null, Dictionary <string, Object>? param = null, String columns = "*"){
             if(terms != null){
                 this.statement = $"SELECT {columns} FROM {this.table} WHERE {terms}";
@@ -52,6 +40,10 @@ namespace FirstProgram.Src.Lib.MySql
             return this;
         }
 
+        ///<summary>Uses the primary key to search on database</summary>
+        ///<param name="id" type="string">Primary key value of the row data</param>
+        ///<param name="columns" type="string">Columns that will be returned on SQL search</param>
+        ///<returns>A Datalayer object with all data stored</returns>
         public DataLayer findById(string id, string columns = "*"){
             var param = new Dictionary <string, Object>();
             param["?id"] = id;
@@ -59,25 +51,22 @@ namespace FirstProgram.Src.Lib.MySql
             return this.find($"{this.primary} = ?id", param, columns).fetch();
         }
 
-        //USER: aluno
-        //PASS: aluno@escola
-
-        public DataLayer fetch(bool all = false){
-
+        ///<summary>Stores a SELECT result data</summary>
+        ///<param name="getAll">If True will get all rows, If False will get only the first row on result</param>
+        ///<returns>A Datalayer object with all data stored</returns>
+        public DataLayer fetch(bool getAll = false){
             try
             {
                 var rows = this.read();
-                if(!all){
-                    this.data = rows.First();
+                if(getAll){
                     this.list = rows;
                 }
+                this.data = rows.First();
             }
             catch (Exception ex){
                 Console.WriteLine($"ERROR: {ex.Message}");
             }
             return this;
-           /*  if(rows == null || rows.Count == 0) return null;   */
-            //foreach (var item in rows){}
         }
 
 
@@ -92,7 +81,7 @@ namespace FirstProgram.Src.Lib.MySql
                 }
 
                 if(!this.data.ContainsKey(this.primary)){
-                    id = this.insert(this.data).ToString();
+                    id = this.insert(this.table, this.data).ToString();
                 }
                 
                 if(id == null) return false;
@@ -122,14 +111,3 @@ namespace FirstProgram.Src.Lib.MySql
     }
 }
 #nullable disable
-
-/* //Select
-Console.WriteLine("Select - Command:");
-MySqlCommand stmt = conn.CreateCommand();
-stmt.CommandText = "SELECT * FROM book";
-stmt.Prepare();
-MySqlDataReader result = stmt.ExecuteReader();
-while (result.Read())
-{
-    Console.WriteLine($"Result: id: {result.GetString("id")} name: {result.GetString("name")} price: {result.GetString("price")}");
-} */
