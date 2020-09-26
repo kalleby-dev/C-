@@ -3,6 +3,7 @@ using System.Windows.Forms;
 using FirstProgram.Src.View;
 using FirstProgram.Src.Interfaces;
 using FirstProgram.Src.Lib.MySql;
+using FirstProgram.Src.Lib.MySql.Exemple;
 
 namespace FirstProgram
 {
@@ -11,19 +12,21 @@ namespace FirstProgram
 
         static void Main()
         {
-            DataLayer database = new DataLayer("book");
-            var user = database;
-            user.set("name", "DOuglass");
-            user.set("price", "100.99");
-            //Console.WriteLine(user.save());
-            //Console.WriteLine($"id:{user.Data["id"]} - name:{user.Data["name"]} - price:{user.Data["price"]}");
+            var param = new UserModel().createParameter();
+            param["?name"] = "veronica";
+
+            var user  = new UserModel().find("name = ?name", param).fetch();
+            user.set("name", "Veronica Plesca");
+            user.set("number", "100");
+            Console.WriteLine(user.save());
+            Console.WriteLine($"id:{user.Data["id"]} - name: {user.Data["name"]} - number: {user.Data["number"]}");
 
             Console.WriteLine("-----------");
 
-            var users = database.find("name ").fetch(true).GetFetch;
+            var users = new UserModel().find().fetch(true).GetFetch;
             
             foreach (var item in users){
-                Console.WriteLine($"id:{item["id"]} - name: {item["name"]}");
+                Console.WriteLine($"id:{item["id"]} - name: {item["name"]} - number: {item["number"]}");
             }
             /* Application.EnableVisualStyles();
             Application.Run(new TelaInicio()); */

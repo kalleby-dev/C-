@@ -58,13 +58,15 @@ namespace FirstProgram.Src.Lib.MySql
             try
             {
                 var rows = this.read();
+                if(rows.Count == 0) return this;
+
                 if(getAll){
                     this.list = rows;
                 }
                 this.data = rows.First();
             }
             catch (Exception ex){
-                Console.WriteLine($"ERROR: {ex.Message}");
+                Console.WriteLine($"ERROR: {ex.Message}\n{ex.StackTrace}");
             }
             return this;
         }
@@ -77,7 +79,7 @@ namespace FirstProgram.Src.Lib.MySql
             try{
                 // Criar um novo
                 if(this.data.ContainsKey(this.primary)){
-                    //this.update();
+                    this.update(this.table, this.data);
                 }
 
                 if(!this.data.ContainsKey(this.primary)){
@@ -91,7 +93,7 @@ namespace FirstProgram.Src.Lib.MySql
                 return true;
             }
             catch (Exception ex){
-                Console.WriteLine($"ERROR: {ex.Message}");
+                Console.WriteLine($"ERROR: {ex}\n{ex.StackTrace}");
                 return false;
             }
 
@@ -100,6 +102,10 @@ namespace FirstProgram.Src.Lib.MySql
 
         public void set(String column, Object value){
             this.data[column] = value;
+        }
+
+        public Dictionary <string, Object> createParameter(){
+            return new Dictionary <string, Object>();  
         }
         
 /*         public DataLayer? findById(long id){

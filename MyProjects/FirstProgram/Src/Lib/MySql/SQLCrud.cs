@@ -93,9 +93,10 @@ namespace FirstProgram.Src.Lib.MySql
 
         
 
-        protected void update( Array data){
-
+        protected void update(String table, Dictionary<String, Object> data){
+            
         }
+
         protected void delete( Array data){
 
         }
