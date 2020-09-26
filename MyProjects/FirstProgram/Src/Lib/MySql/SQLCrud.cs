@@ -41,8 +41,8 @@ namespace FirstProgram.Src.Lib.MySql
                 return stmt.LastInsertedId;
             }
             catch (Exception ex){
-                Console.WriteLine($"ERROR: {ex.Message}");
-                throw new NullReferenceException("Não foi possivel efetuar o registro");
+                Console.WriteLine($"CRUD::SQL-ERROR: {ex.Message}");
+                throw new Exception("Não foi possivel efetuar o registro");
             }
             finally{
                 this.close();
@@ -50,15 +50,15 @@ namespace FirstProgram.Src.Lib.MySql
         }
         
 
-        // Realiza uma busca no banco de dados
+        ///<summary>Realiza uma busca no banco de dados e retorna uma lista com as linhas da tabela</summary>
         protected List<Dictionary<String, Object>> read(){
-            this.open();
+            this.open(); // Inicia uma conexão
+            // Carrega o cmd SQL para efetuar a consulta
             var stmt = this.Connection.CreateCommand();
-
-            // Prepara o comando SQL
             stmt.CommandText = $"{this.statement}";
             
-            // Prepara a statement com os valores
+
+            // Caso hajam parametros irá carregar os valores na stmt 
             if(this.param != null){
                 foreach (var item in this.param){
                     stmt.Parameters.AddWithValue(item.Key, item.Value);  
@@ -66,35 +66,63 @@ namespace FirstProgram.Src.Lib.MySql
             }
 
             try{
-                // Realiza a busca e retorna os resultados
+                // Executa a busca no banco de dados
                 var rows = stmt.ExecuteReader(); 
-            
                 var list = new List<Dictionary <String, Object>> ();
-                
-                while (rows.Read()){
-                    var tempData = new Dictionary <String, Object>();
 
+                while (rows.Read()){
+                    // Faz a leitura dos valores recebidos
+                    var tempData = new Dictionary <String, Object>();
                     for (int i = 0; i < rows.FieldCount; i++){
                         tempData[ rows.GetName(i) ] = rows.GetValue(i);
                     }
 
+                    // Armazena o registro em memoria
                     list.Add(tempData); 
                 }
+                // Retorna uma lista com todas os registros encontrados
                 return list;
             }
             catch (Exception ex){
-                Console.WriteLine($"ERROR: {ex.Message}");
+                Console.WriteLine($"CRUD::SQL-ERROR: {ex.Message}");
                 throw new NullReferenceException("Não foi possivel efetuar a busca");
             }
             finally{
-                this.close();
+                this.close(); // Encerra a conexão
             }  
         }
 
         
+        ///<summary>Atualiza informações de um registro no banco de dados</summary>
+        protected long update(String table, String terms, Dictionary<String, Object> data){
+            this.open(); // Inicia uma conexão
 
-        protected void update(String table, Dictionary<String, Object> data){
+            var stmt = this.Connection.CreateCommand();
             
+            // Cria o cmd de Alteração dinamicamente
+            var sqlColumns = String.Join(",", data.Keys);
+            var sqlParam = String.Join(", ",  (data.Keys).Select( key => String.Format($"{key} = ?{key}")) );
+            stmt.CommandText = $"UPDATE {table} SET {sqlParam} {terms}";
+
+            // Prepara a statement com os valores
+            foreach (var item in data){
+                stmt.Parameters.AddWithValue($"?{item.Key}", $"{item.Value}");
+            }
+
+            //Console.WriteLine(stmt.CommandText);
+
+            try{
+                // Executa a insersão e retorna o ID do registro
+                stmt.ExecuteNonQuery();
+                return stmt.LastInsertedId;
+            }
+            catch (Exception ex){
+                Console.WriteLine($"CRUD::SQL-ERROR: {ex.Message}");
+                throw new Exception("Não foi possivel efetuar o registro");
+            }
+            finally{
+                this.close();
+            }
         }
 
         protected void delete( Array data){

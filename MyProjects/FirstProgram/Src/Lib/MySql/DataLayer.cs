@@ -79,7 +79,8 @@ namespace FirstProgram.Src.Lib.MySql
             try{
                 // Criar um novo
                 if(this.data.ContainsKey(this.primary)){
-                    this.update(this.table, this.data);
+                    id = this.update(this.table, $"WHERE {this.primary} = {this.data[$"{this.primary}"]}", this.data).ToString();
+                    return true;
                 }
 
                 if(!this.data.ContainsKey(this.primary)){
@@ -87,10 +88,9 @@ namespace FirstProgram.Src.Lib.MySql
                 }
                 
                 if(id == null) return false;
-
-                
                 this.data = this.findById(id).Data;
                 return true;
+
             }
             catch (Exception ex){
                 Console.WriteLine($"ERROR: {ex}\n{ex.StackTrace}");
