@@ -13,21 +13,25 @@ namespace FirstProgram
         static void Main()
         {
             /* Buscar */
-            var param = new UserModel().createParameter();
+/*             var param = new UserModel().createParameter();
             param["?name"] = "Daniel";
             var user  = new UserModel().find("name = ?name", param).fetch();
             Console.WriteLine($"id:{user.Data["id"]} - name: {user.Data["name"]} - number: {user.Data["number"]}");
 
-            param.Clear();
+            param.Clear(); */
 
             /* Alterar */
-            user.set("name", "Kallyne");
+/*             user.set("name", "Kallyne");
             user.set("number", "5000");
 
             Console.WriteLine(user.save());
             Console.WriteLine($"id:{user.Data["id"]} - name: {user.Data["name"]} - number: {user.Data["number"]}");
- 
-            
+  */        
+            UserModel user = new UserModel();
+            user.findById("4");
+            Console.WriteLine($"id:{user.get("id")} - name: {user.get("name")} - number: {user.get("number")}");
+            user.remove();
+            Console.WriteLine($"id:{user.get("id")} - name: {user.get("name")} - number: {user.get("number")}");
             
             /* Listagem Completa */
             Console.WriteLine("-----------");

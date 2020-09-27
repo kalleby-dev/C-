@@ -66,7 +66,7 @@ namespace FirstProgram.Src.Lib.MySql
                 this.data = rows.First();
             }
             catch (Exception ex){
-                Console.WriteLine($"ERROR: {ex.Message}\n{ex.StackTrace}");
+                Console.WriteLine($"ERROR: {ex.Message}{ex.StackTrace}");
             }
             return this;
         }
@@ -91,7 +91,7 @@ namespace FirstProgram.Src.Lib.MySql
 
             }
             catch (Exception ex){
-                Console.WriteLine($"ERROR: {ex}\n{ex.StackTrace}");
+                Console.WriteLine($"ERROR: {ex.Message}{ex.StackTrace}");
                 return false;
             }
 
@@ -105,7 +105,7 @@ namespace FirstProgram.Src.Lib.MySql
         {
             try{
                 if(!this.data.ContainsKey(this.primary)){
-                    throw new Exception("O Objeto não pode ser alterado");
+                    throw new Exception("Objeto não iniciado: você deve iniciar o registo antes de altera-lo");
                 }
 
                 String stmt = $"WHERE {this.primary} = {this.data[this.primary]}";
@@ -117,9 +117,33 @@ namespace FirstProgram.Src.Lib.MySql
                 return this.update(this.table, stmt, this.data, param);
             }
             catch (Exception ex){
-                Console.WriteLine($"ERROR: {ex}\n{ex.StackTrace}");
+                Console.WriteLine($"ERROR: {ex.Message}{ex.StackTrace}");
                 return null;
             }
+        }
+
+        public DataLayer remove(){
+            try{
+                if(!this.data.ContainsKey(this.primary)){
+                    throw new Exception("Objeto não iniciado: você deve iniciar o registo antes de remove-lo");
+                }
+
+                String terms = $"{this.primary} = ?id";
+                var param = new Dictionary <string, Object>();
+                param["?id"] = this.data[this.primary];
+
+
+                if(this.delete(this.table, terms, param)){
+                    this.data.Clear();
+                    this.GetFetch.Clear();
+                }
+
+            }            
+            catch (Exception ex){
+                Console.WriteLine($"ERROR: {ex.Message}{ex.StackTrace}");
+            }
+
+            return this;
         }
 
 
@@ -127,14 +151,24 @@ namespace FirstProgram.Src.Lib.MySql
             this.data[column] = value;
         }
 
+        public Object? get(String column){
+            try
+            {
+                if(!this.data.ContainsKey(column)){
+                    throw new Exception($"Indice '{column}' não encontrado");
+                }
+                return this.data[column];
+            }
+            catch (Exception ex){
+                Console.WriteLine($"ERROR: {ex.Message}{ex.StackTrace}");
+                return null;
+            }
+
+        }
+
         public Dictionary <string, Object> createParameter(){
             return new Dictionary <string, Object>();  
         }
-        
-/*         public DataLayer? findById(long id){
-
-            return this;
-        } */
         
 
     }

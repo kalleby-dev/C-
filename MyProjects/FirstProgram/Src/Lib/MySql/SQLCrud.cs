@@ -130,8 +130,31 @@ namespace FirstProgram.Src.Lib.MySql
             }
         }
 
-        protected void delete( Array data){
+        protected bool delete(String table, String terms, Dictionary<String, Object> param){
+            this.open();
+            
+            // Cria o comando SQL para remoção
+            var stmt = this.Connection.CreateCommand();
+            stmt.CommandText = $"DELETE FROM {table} WHERE {terms}";
 
+            // Prepara a statement com os valores
+            foreach (var item in param){
+                stmt.Parameters.AddWithValue($"?{item.Key}", $"{item.Value}");
+            }
+
+            try{
+                // Executa o comando para remover o registo do banco
+                stmt.ExecuteNonQuery();
+                return true;
+            }
+            catch (Exception ex){
+                Console.WriteLine($"CRUD::SQL-ERROR: {ex.Message}");
+                return false;
+                throw new Exception("Erro ao tentar remover registo");
+            }
+            finally{
+                this.close();
+            }
         }
         
 
