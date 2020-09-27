@@ -28,10 +28,9 @@ namespace FirstProgram
             Console.WriteLine($"id:{user.Data["id"]} - name: {user.Data["name"]} - number: {user.Data["number"]}");
   */        
             UserModel user = new UserModel();
-            user.findById("99");
-/*             user.set("name", "Joao");
-            user.set("number", "55");
-            Console.WriteLine(user.save()); */
+            user.findById("102");
+            Console.WriteLine($"id:{user.get("id")} - name: {user.get("name")} - number: {user.get("number")}");
+            user.remove();
             Console.WriteLine($"id:{user.get("id")} - name: {user.get("name")} - number: {user.get("number")}");
             
             /* Listagem Completa */

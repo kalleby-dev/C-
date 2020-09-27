@@ -1,7 +1,6 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
-using MySql.Data.MySqlClient;
 
 
 namespace FirstProgram.Src.Lib.MySql
@@ -9,16 +8,7 @@ namespace FirstProgram.Src.Lib.MySql
     #nullable enable
     public abstract class SQLCrud : SQLConnector
     {
-        
-        
 
-        protected Dictionary <String, Object> data = new Dictionary <string, Object> ();
-
-        public Dictionary <String, Object> Data { 
-            get{return this.data;}
-        }
-
-        
         ///<summary>Insere um novo registro no banco de dados retorna o ID do registro</summary>
         protected long insert(String table, Dictionary <String, Object> data, bool timestamp = false){
             this.open();
@@ -50,13 +40,13 @@ namespace FirstProgram.Src.Lib.MySql
         
 
         ///<summary>Realiza uma busca no banco de dados e retorna uma lista com as linhas da tabela</summary>
-        protected List<Dictionary<String, Object>> read(String statement, Dictionary <String, Object> param){
-            this.open(); // Inicia uma conexão
+        protected List<Dictionary<String, Object>> read(String statement, Dictionary <String, Object>? param = null){
+            this.open();
+
             // Carrega o cmd SQL para efetuar a consulta
             var stmt = this.Connection.CreateCommand();
             stmt.CommandText = $"{statement}";
             
-
             // Caso hajam parametros irá carregar os valores na stmt 
             if(param != null){
                 foreach (var item in param){
@@ -87,14 +77,14 @@ namespace FirstProgram.Src.Lib.MySql
                 throw new NullReferenceException("Não foi possivel efetuar a busca");
             }
             finally{
-                this.close(); // Encerra a conexão
+                this.close();
             }  
         }
 
         
         ///<summary>Atualiza informações de um registro no banco de dados</summary>
-        protected long update(String table, String terms, Dictionary<String, Object> data, Dictionary<String, Object>? param = null){
-            this.open(); // Inicia uma conexão
+        protected bool update(String table, String terms, Dictionary<String, Object> data, Dictionary<String, Object>? param = null){
+            this.open();
             
             var stmt = this.Connection.CreateCommand();
             
@@ -118,10 +108,11 @@ namespace FirstProgram.Src.Lib.MySql
             try{
                 // Executa a insersão e retorna o ID do registro
                 stmt.ExecuteNonQuery();
-                return stmt.LastInsertedId;
+                return true;
             }
             catch (Exception ex){
                 Console.WriteLine($"CRUD::SQL-ERROR: {ex.Message}");
+                return false;
                 throw new Exception("Não foi possivel efetuar o registro");
             }
             finally{
