@@ -94,9 +94,9 @@ namespace FirstProgram.Src.Lib.MySql
 
         
         ///<summary>Atualiza informações de um registro no banco de dados</summary>
-        protected long update(String table, String terms, Dictionary<String, Object> data){
+        protected long update(String table, String terms, Dictionary<String, Object> data, Dictionary<String, Object>? param = null){
             this.open(); // Inicia uma conexão
-
+            
             var stmt = this.Connection.CreateCommand();
             
             // Cria o cmd de Alteração dinamicamente
@@ -109,7 +109,12 @@ namespace FirstProgram.Src.Lib.MySql
                 stmt.Parameters.AddWithValue($"?{item.Key}", $"{item.Value}");
             }
 
-            //Console.WriteLine(stmt.CommandText);
+            // Prepara a statement com as condições
+            if(param != null){
+                foreach (var item in param){
+                    stmt.Parameters.AddWithValue($"?{item.Key}", $"{item.Value}");
+                }  
+            }
 
             try{
                 // Executa a insersão e retorna o ID do registro

@@ -74,16 +74,14 @@ namespace FirstProgram.Src.Lib.MySql
 
         public bool save()
         {
-
             string? id = null;
             try{
                 // Criar um novo
                 if(this.data.ContainsKey(this.primary)){
-                    id = this.update(this.table, $"WHERE {this.primary} = {this.data[$"{this.primary}"]}", this.data).ToString();
-                    return true;
+                    id = this.alter().ToString();
                 }
 
-                if(!this.data.ContainsKey(this.primary)){
+                else if(!this.data.ContainsKey(this.primary)){
                     id = this.insert(this.table, this.data).ToString();
                 }
                 
@@ -97,6 +95,31 @@ namespace FirstProgram.Src.Lib.MySql
                 return false;
             }
 
+        }
+
+
+        ///<summary>Generate a SQL command string with all terms and parameters</summary>
+        ///<param name="terms" type="string">Clauses for SQL command</param>
+        ///<param name="param" type="string">Parameters for SQL clauses</param>
+        protected long? alter(String? terms = null, Dictionary <string, Object>? param = null)
+        {
+            try{
+                if(!this.data.ContainsKey(this.primary)){
+                    throw new Exception("O Objeto não pode ser alterado");
+                }
+
+                String stmt = $"WHERE {this.primary} = {this.data[this.primary]}";
+
+                if(terms != null){
+                    stmt = $"WHERE {terms}";
+                }
+
+                return this.update(this.table, stmt, this.data, param);
+            }
+            catch (Exception ex){
+                Console.WriteLine($"ERROR: {ex}\n{ex.StackTrace}");
+                return null;
+            }
         }
 
 
