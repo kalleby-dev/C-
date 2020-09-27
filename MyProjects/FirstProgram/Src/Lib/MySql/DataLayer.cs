@@ -14,8 +14,14 @@ namespace FirstProgram.Src.Lib.MySql
         protected bool timestamps;
         protected String?[] required {get; set;} = null!;
 
+
+        private String? statement;
+        private Dictionary <string, Object>? param;
+
         protected List<Dictionary<String, Object>> list = new List<Dictionary<string, object>> ();
         public List<Dictionary<String, Object>> GetFetch {get{return this.list;}}
+
+        //public  List<Dictionary<String, Object>> result = new List<DataLayer>();
         
 
         public DataLayer(String table, String?[] req = null!, String primary = "id", bool timestamps = true)
@@ -30,13 +36,17 @@ namespace FirstProgram.Src.Lib.MySql
         ///<param name="param" type="string">Parameters for SQL clauses</param>
         ///<param name="columns" type="string">Columns that will be returned on SQL search</param>
         public DataLayer find(String? terms = null, Dictionary <string, Object>? param = null, String columns = "*"){
+            var statement = $"SELECT {columns} FROM {this.table}";
+            
             if(terms != null){
-                this.statement = $"SELECT {columns} FROM {this.table} WHERE {terms}";
-                this.param = param;
-                return this;
+                statement = $"SELECT {columns} FROM {this.table} WHERE {terms}";
+                
             }
-
-            this.statement = $"SELECT {columns} FROM {this.table}";
+            
+            var rows = this.read(statement, param);
+            this.list = rows;
+            this.data = rows.First();
+            /* this.fetch( this.read(statement, param), true); */
             return this;
         }
 
@@ -48,28 +58,51 @@ namespace FirstProgram.Src.Lib.MySql
             var param = new Dictionary <string, Object>();
             param["?id"] = id;
 
-            return this.find($"{this.primary} = ?id", param, columns).fetch();
+            return this.find($"{this.primary} = ?id", param, columns);
         }
+
+
 
         ///<summary>Stores a SELECT result data</summary>
         ///<param name="getAll">If True will get all rows, If False will get only the first row on result</param>
         ///<returns>A Datalayer object with all data stored</returns>
-        public DataLayer fetch(bool getAll = false){
+        public List<DataLayer> fetch(bool getAll = false){
+            var result = new List<DataLayer>();
             try
-            {
-                var rows = this.read();
-                if(rows.Count == 0) return this;
+            {   
+                // Verifica se foi declarado uma stmt de busca
+/*                 if(this.statement == null && this.param == null){
+                    throw new Exception("Não foi possivel processar a busca, paramentros em falta");
+                } */
 
+                var rows = this.list;
+
+                // Verifica se houve resultados
+                if(rows.Count == 0){
+                    throw new Exception("Não foram encontrados resultados para essa busca");
+                }
+                
+                
                 if(getAll){
+                    
+                    foreach (var item in rows){
+                        var dataItem = new DataLayer(this.table);
+                        dataItem.data = item;
+                        result.Add(dataItem);
+                    }
+
                     this.list = rows;
                 }
-                this.data = rows.First();
+                
+                
             }
             catch (Exception ex){
                 Console.WriteLine($"ERROR: {ex.Message}{ex.StackTrace}");
             }
-            return this;
+            //return this;
+            return result;
         }
+
 
 
         public bool save()
@@ -86,7 +119,8 @@ namespace FirstProgram.Src.Lib.MySql
                 }
                 
                 if(id == null) return false;
-                this.data = this.findById(id).Data;
+                //this.data = this.findById(id).Data;
+                this.data[this.primary] = id;
                 return true;
 
             }

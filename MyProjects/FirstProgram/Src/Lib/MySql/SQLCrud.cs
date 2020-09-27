@@ -11,8 +11,7 @@ namespace FirstProgram.Src.Lib.MySql
     {
         
         
-        protected String? statement = null;
-        protected Dictionary <string, Object>? param = null;
+
         protected Dictionary <String, Object> data = new Dictionary <string, Object> ();
 
         public Dictionary <String, Object> Data { 
@@ -51,16 +50,16 @@ namespace FirstProgram.Src.Lib.MySql
         
 
         ///<summary>Realiza uma busca no banco de dados e retorna uma lista com as linhas da tabela</summary>
-        protected List<Dictionary<String, Object>> read(){
+        protected List<Dictionary<String, Object>> read(String statement, Dictionary <String, Object> param){
             this.open(); // Inicia uma conexão
             // Carrega o cmd SQL para efetuar a consulta
             var stmt = this.Connection.CreateCommand();
-            stmt.CommandText = $"{this.statement}";
+            stmt.CommandText = $"{statement}";
             
 
             // Caso hajam parametros irá carregar os valores na stmt 
-            if(this.param != null){
-                foreach (var item in this.param){
+            if(param != null){
+                foreach (var item in param){
                     stmt.Parameters.AddWithValue(item.Key, item.Value);  
                 } 
             }

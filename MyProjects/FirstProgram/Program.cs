@@ -28,16 +28,17 @@ namespace FirstProgram
             Console.WriteLine($"id:{user.Data["id"]} - name: {user.Data["name"]} - number: {user.Data["number"]}");
   */        
             UserModel user = new UserModel();
-            user.findById("4");
-            Console.WriteLine($"id:{user.get("id")} - name: {user.get("name")} - number: {user.get("number")}");
-            user.remove();
+            user.findById("99");
+/*             user.set("name", "Joao");
+            user.set("number", "55");
+            Console.WriteLine(user.save()); */
             Console.WriteLine($"id:{user.get("id")} - name: {user.get("name")} - number: {user.get("number")}");
             
             /* Listagem Completa */
             Console.WriteLine("-----------");
-            var users = new UserModel().find().fetch(true).GetFetch;
+            var users = new UserModel().find().fetch(true);//.fetch(true);
             foreach (var item in users){
-                Console.WriteLine($"id:{item["id"]} - name: {item["name"]} - number: {item["number"]}");
+                Console.WriteLine($"id:{item.get("id")} - name: {item.get("name")} - number: {item.get("number")}");
             }
 
 
