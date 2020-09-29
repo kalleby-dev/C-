@@ -11,8 +11,8 @@ namespace FirstProgram.Src.Lib.MySql
 
         ///<summary>Insere um novo registro no banco de dados retorna o ID do registro</summary>
         protected long insert(String table, Dictionary <String, Object> data, bool timestamp = false){
-            this.open();
-            var stmt = this.Connection.CreateCommand();
+            base.open();
+            var stmt = base.Connection.CreateCommand();
 
             // Cria o cmd de Inserção dinamicamente
             var sqlColumns = String.Join(",", data.Keys);
@@ -34,17 +34,17 @@ namespace FirstProgram.Src.Lib.MySql
                 throw new Exception("Não foi possivel efetuar o registro");
             }
             finally{
-                this.close();
+                base.close();
             }
         }
         
 
         ///<summary>Realiza uma busca no banco de dados e retorna uma lista com as linhas da tabela</summary>
         protected List<Dictionary<String, Object>> read(String statement, Dictionary <String, Object>? param = null){
-            this.open();
+            base.open();
 
             // Carrega o cmd SQL para efetuar a consulta
-            var stmt = this.Connection.CreateCommand();
+            var stmt = base.Connection.CreateCommand();
             stmt.CommandText = $"{statement}";
             
             // Caso hajam parametros irá carregar os valores na stmt 
@@ -77,16 +77,16 @@ namespace FirstProgram.Src.Lib.MySql
                 throw new NullReferenceException("Não foi possivel efetuar a busca");
             }
             finally{
-                this.close();
+                base.close();
             }  
         }
 
         
         ///<summary>Atualiza informações de um registro no banco de dados</summary>
         protected bool update(String table, String terms, Dictionary<String, Object> data, Dictionary<String, Object>? param = null){
-            this.open();
+            base.open();
             
-            var stmt = this.Connection.CreateCommand();
+            var stmt = base.Connection.CreateCommand();
             
             // Cria o cmd de Alteração dinamicamente
             var sqlColumns = String.Join(",", data.Keys);
@@ -116,15 +116,15 @@ namespace FirstProgram.Src.Lib.MySql
                 throw new Exception("Não foi possivel efetuar o registro");
             }
             finally{
-                this.close();
+                base.close();
             }
         }
 
         protected bool delete(String table, String terms, Dictionary<String, Object> param){
-            this.open();
+            base.open();
             
             // Cria o comando SQL para remoção
-            var stmt = this.Connection.CreateCommand();
+            var stmt = base.Connection.CreateCommand();
             stmt.CommandText = $"DELETE FROM {table} WHERE {terms}";
 
             // Prepara a statement com os valores
@@ -143,7 +143,7 @@ namespace FirstProgram.Src.Lib.MySql
                 throw new Exception("Erro ao tentar remover registo");
             }
             finally{
-                this.close();
+                base.close();
             }
         }
         

@@ -6,14 +6,11 @@ namespace FirstProgram.Src.Lib.MySql
 {
     public class DataLayer : SQLCrud
     {
-        
         protected String primary;
-        protected String table = "";
+        protected String table;
         protected bool timestamps;
         protected String?[] required {get; set;} = null!;
         protected Dictionary <String, Object> data = new Dictionary <string, Object> ();
-
-
         protected List<Dictionary<String, Object>> list = new List<Dictionary<string, object>> ();
         
 
@@ -26,26 +23,27 @@ namespace FirstProgram.Src.Lib.MySql
 
 
 
-        ///<summary>Generate a SQL command string with all terms and parameters</summary>
-        ///<param name="terms" type="string">Clauses for SQL command</param>
-        ///<param name="param" type="string">Parameters for SQL clauses</param>
-        ///<param name="columns" type="string">Columns that will be returned on SQL search</param>
+        ///<summary>Executes a SQL search, and return the first result</summary>
+        ///<param name="terms" type="string">Custom clauses for the SQL command</param>
+        ///<param name="param" type="string">Custom parameters for the SQL clauses</param>
+        ///<param name="columns" type="string">Columns that will be returned on result</param>
         public DataLayer find(String? terms = null, Dictionary <string, Object>? param = null, String columns = "*"){
+            // Define a SQL statement without clauses
             var sql = $"SELECT {columns} FROM {this.table}";
             
+            // Define a custom SQL statement with custom clauses
             if(terms != null){
-                sql = $"SELECT {columns} FROM {this.table} WHERE {terms}";
-                
+                sql = $"SELECT {columns} FROM {this.table} WHERE {terms}"; 
             }
             
-            var rows = this.read(sql, param);
+            // Execute the statement and store results
+            var rows = base.read(sql, param);
             if(rows.Count != 0){
                 this.list = rows;
                 this.data = rows[0];                
             }
             return this;
         }
-
 
 
 
@@ -62,10 +60,9 @@ namespace FirstProgram.Src.Lib.MySql
 
 
 
-        ///<summary>Stores a SELECT result data</summary>
-        ///<param name="getAll">If True will get all rows, If False will get only the first row on result</param>
-        ///<returns>A Datalayer object with all data stored</returns>
-        public List<DataLayer> fetch(bool getAll = false){
+        ///<summary>Return all rows from result in DataLayer objects</summary>
+        ///<returns>A object list with all data stored</returns>
+        public List<DataLayer> fetch(){
             var result = new List<DataLayer>();
             try
             {   
@@ -77,15 +74,14 @@ namespace FirstProgram.Src.Lib.MySql
                 }
                 
                 
-                if(getAll){
-                    foreach (var item in rows){
-                        var dataItem = new DataLayer(this.table);
-                        dataItem.data = item;
-                        result.Add(dataItem);
-                    }
-
-                    this.list = rows;
+                foreach (var item in rows){
+                    var dataItem = new DataLayer(this.table);
+                    dataItem.data = item;
+                    result.Add(dataItem);
                 }
+
+                this.list = rows;
+                
                 
                 
             }
@@ -96,7 +92,9 @@ namespace FirstProgram.Src.Lib.MySql
         }
 
 
-
+        ///<summary>Stores a SELECT result data</summary>
+        ///<param name="getAll">If True will get all rows, If False will get only the first row on result</param>
+        ///<returns>A Datalayer object with all data stored</returns>
         public bool save()
         {
             string? id = null;
@@ -109,7 +107,7 @@ namespace FirstProgram.Src.Lib.MySql
                 }
                 
                 else if(!this.data.ContainsKey(this.primary)){
-                    id = this.insert(this.table, this.data).ToString();
+                    id = base.insert(this.table, this.data).ToString();
                 }
 
                 if(id == null) return false;
@@ -141,7 +139,7 @@ namespace FirstProgram.Src.Lib.MySql
                     stmt = $"WHERE {terms}";
                 }
 
-                return this.update(this.table, stmt, this.data, param);
+                return base.update(this.table, stmt, this.data, param);
             }
             catch (Exception ex){
                 Console.WriteLine($"ERROR: {ex.Message}{ex.StackTrace}");
@@ -162,7 +160,7 @@ namespace FirstProgram.Src.Lib.MySql
                 param["?id"] = this.data[this.primary];
 
 
-                if(this.delete(this.table, terms, param)){
+                if(base.delete(this.table, terms, param)){
                     this.data.Clear();
                     //this.GetFetch.Clear();
                 }

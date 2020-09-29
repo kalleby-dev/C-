@@ -12,37 +12,46 @@ namespace FirstProgram
 
         static void Main()
         {
-            /* Buscar */
-/*             var param = new UserModel().createParameter();
-            param["?name"] = "Daniel";
-            var user  = new UserModel().find("name = ?name", param).fetch();
-            Console.WriteLine($"id:{user.Data["id"]} - name: {user.Data["name"]} - number: {user.Data["number"]}");
-
-            param.Clear(); */
-
-            /* Alterar */
-/*             user.set("name", "Kallyne");
-            user.set("number", "5000");
-
-            Console.WriteLine(user.save());
-            Console.WriteLine($"id:{user.Data["id"]} - name: {user.Data["name"]} - number: {user.Data["number"]}");
-  */        
             UserModel user = new UserModel();
-            user.findById("102");
+            //Criar
+            Console.WriteLine("---\nInserindo");
+            user.set("name", "Marcelo");
+            user.set("number", "35");
+            user.save();
             Console.WriteLine($"id:{user.get("id")} - name: {user.get("name")} - number: {user.get("number")}");
+
+            //Alterar
+            Console.WriteLine("---\nAlterando");
+            user.findById("104");
+            user.set("name", "Francisco");
+            user.set("number", "44");
+            user.save();
+            Console.WriteLine($"id:{user.get("id")} - name: {user.get("name")} - number: {user.get("number")}");
+
+            //Listagem
+            Console.WriteLine("---\nListando");
+            var users = new UserModel().find().fetch();
+            foreach (var item in users){
+                Console.WriteLine($"id:{item.get("id")} - name: {item.get("name")} - number: {item.get("number")}");
+            }
+
+            //Remoção
+            Console.WriteLine("---\nRemovendo");
+            var param = user.createParameter();
+            param["?name"] = "Marcelo";
+            user.find("name = ?name", param);
             user.remove();
-            Console.WriteLine($"id:{user.get("id")} - name: {user.get("name")} - number: {user.get("number")}");
             
-            /* Listagem Completa */
-            Console.WriteLine("-----------");
-            var users = new UserModel().find().fetch(true);//.fetch(true);
+            //Listagem
+            Console.WriteLine("---\nListando novamente");
+            users = new UserModel().find().fetch();
             foreach (var item in users){
                 Console.WriteLine($"id:{item.get("id")} - name: {item.get("name")} - number: {item.get("number")}");
             }
 
 
-            /* Application.EnableVisualStyles();
-            Application.Run(new TelaInicio()); */
+            //Application.EnableVisualStyles();
+            //Application.Run(new TelaInicio());
             Console.ReadKey();
         }
     }
