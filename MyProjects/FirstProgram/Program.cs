@@ -12,8 +12,9 @@ namespace FirstProgram
 
         static void Main()
         {
+            //ooa mundo
             UserModel user = new UserModel();
-            //Criar
+            //Criar exemplo
             Console.WriteLine("---\nInserindo");
             user.set("name", "Marcelo");
             user.set("number", "35");
